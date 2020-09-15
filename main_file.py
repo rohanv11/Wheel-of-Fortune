@@ -1,6 +1,6 @@
 import sys
 #sys.setExecutionLimit(600000) # time limit = 10 mins 
-
+##
 import json
 import random
 import time
@@ -61,13 +61,13 @@ class WOFComputerPlayer(WOFPlayer):
             return True
         return False
     
-    def getPossibleLetters(self, guessed): ##to cross check(FIXED)
+    def getPossibleLetters(self, guessed): ##to cross check(FIXED in feature branch)
         lst = []
         LET_S = ""
         if self.prizeMoney >= VOWEL_COST:
             LET_S = LETTERS
         else:
-            LET_S = LETTERS
+            LET_S = LETTERS_WITHOUT_VOWELS
         for c in LET_S:
             if c not in guessed:
                 lst.append(c)
