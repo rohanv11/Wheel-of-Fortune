@@ -35,16 +35,19 @@ class WOFPlayer:
 class WOFHumanPlayer(WOFPlayer):
     
     def getMove(self, category, obscuredPhrase, guessed):
-        st = input("""
-        {} has ${}
+        print("""
+        =============={}=======has=======${}============================
         
-        Category: {}
-        Phrase:  {}
+        >>>>>>Category: {}
+        >>>>>>>Phrase:  {}
+        /////////////////////////////////////
         Guessed: {}
-        
+        /////////////////////////////////////
+
         Guess a letter, phrase, or type 'exit' or 'pass':
-        Your answer : 
-            """.format(self.name, self.prizeMoney, category, obscuredPhrase, guessed))
+        >> : """.format(self.name, self.prizeMoney, category, obscuredPhrase, guessed),
+        	end = "")
+        st = input()
         return st
         
 
@@ -56,7 +59,7 @@ class WOFComputerPlayer(WOFPlayer):
         WOFPlayer.__init__(self, name)
         self.difficulty = difficulty
         
-    def smartCoinFlip(self):
+    def smartCoinFlip(self): ##take a look, not important right now
         if self.difficulty < random.randint(1, 10):
             return True
         return False
@@ -81,18 +84,18 @@ class WOFComputerPlayer(WOFPlayer):
             bool1 = self.smartCoinFlip()
             if bool1 == True:
                 i = -1
-                for _ in range(len(self.SORTED_FREQUENCIES)):
+                for _ in self.SORTED_FREQUENCIES:
                     if self.SORTED_FREQUENCIES[i] in lst:
-                        if self.SORTED_FREQUENCIES[i] in VOWELS:
-                            self.prizeMoney -= VOWEL_COST
+                        #if self.SORTED_FREQUENCIES[i] in VOWELS: this is already being done in while loop below
+                        #   self.prizeMoney -= VOWEL_COST
                         return self.SORTED_FREQUENCIES[i]
                     i=i-1
             else:
                 while(True):
                     char = random.choice(LETTERS)
                     if char in lst:
-                        if char in VOWELS:
-                            self.prizeMoney -= VOWEL_COST
+                        #if char in VOWELS:
+                        #    self.prizeMoney -= VOWEL_COST
                         return char
                 
     
@@ -164,12 +167,12 @@ Guessed:  {}""".format(category, obscuredPhrase, ', '.join(sorted(guessed)))
 print('='*15)
 print('WHEEL OF PYTHON')
 print('='*15)
-print('')
+print('\n'*2)
 
 num_human = getNumberBetween('How many human players?', 0, 10)
 
 # Create the human player instances
-human_players = [WOFHumanPlayer(input('Enter the name for human player #{}'.format(i+1))) for i in range(num_human)]
+human_players = [WOFHumanPlayer(input('Enter the name for human player #{} : '.format(i+1))) for i in range(num_human)]
 
 num_computer = getNumberBetween('How many computer players?', 0, 10)
 
@@ -222,6 +225,7 @@ def requestPlayerMove(player, category, guessed):
             return move
 
 
+
 while True:
     player = players[playerIndex]
     wheelPrize = spinWheel()
@@ -249,7 +253,7 @@ while True:
         elif len(move) == 1: # they guessed a letter
             guessed.append(move)
 
-            print('{} guesses "{}"'.format(player.name, move))
+            print('\n{} guesses "{}"\n'.format(player.name, move))
 
             if move in VOWELS:
                 player.prizeMoney -= VOWEL_COST
@@ -292,7 +296,7 @@ while True:
     playerIndex = (playerIndex + 1) % len(players)
 
 if winner:
-    # In your head, you should hear this as being announced by a game show host
+    # Final Announcement
     print('{} wins! The phrase was {}'.format(winner.name, phrase))
     print('{} won ${}'.format(winner.name, winner.prizeMoney))
     if len(winner.prizes) > 0:
@@ -301,3 +305,14 @@ if winner:
             print('    - {}'.format(prize))
 else:
     print('Nobody won. The phrase was {}'.format(phrase))
+
+
+
+
+
+
+#TODO:
+## write a function which would display the availabe characters to play
+## make players win based on the amount of money they have rather than just the one guess the last ever bit of phrase
+## if it is in phrase then, like "fri" in "friend", so "fri" == 3 
+## add prize_amount = 3*count("fri")*prizeAmount
